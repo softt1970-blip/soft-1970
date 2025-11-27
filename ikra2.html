@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приложение продаж икры</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f5f6fa;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+            --border-color: #dcdde1;
+            --success-color: #27ae60;
+            --warning-color: #e67e22;
+            --danger-color: #e74c3c;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #ecf0f1;
+            --secondary-color: #3498db;
+            --background-color: #1a1a2e;
+            --text-color: #ecf0f1;
+            --card-bg: #16213e;
+            --border-color: #0f3460;
+            --success-color: #27ae60;
+            --warning-color: #e67e22;
+            --danger-color: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .menu-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .screen {
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .active {
+            display: block;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .settings-option {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-right: 15px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--secondary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-info {
+            flex-grow: 1;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .price-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .price-input {
+            width: 100px;
+            padding: 5px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .menu {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .price-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Система управления продажами икры</h1>
+        </header>
+
+        <div class="menu">
+            <button class="menu-btn" data-screen="price">Прайс</button>
+            <button class="menu-btn" data-screen="orders">Заказы</button>
+            <button class="menu-btn" data-screen="history">История продаж</button>
+            <button class="menu-btn" data-screen="stats">Статистика продаж</button>
+            <button class="menu-btn" data-screen="settings">Настройки</button>
+        </div>
+
+        <!-- Экран прайс-листа -->
+        <div id="price" class="screen active">
+            <h2>Прайс-лист икры</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Наименование товара</th>
+                        <th>Цена (руб/кг)</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="price-list">
+                    <!-- Данные будут заполнены через JavaScript -->
+                </tbody>
+            </table>
+            <button class="btn btn-primary" id="add-product">Добавить товар</button>
+        </div>
+
+        <!-- Экран заказов -->
+        <div id="orders" class="screen">
+            <h2>Создание заказа</h2>
+            <div class="form-group">
+                <label for="client-name">Имя клиента:</label>
+                <input type="text" id="client-name" placeholder="Введите имя клиента">
+            </div>
+            <div class="form-group">
+                <label for="order-date">Дата заказа:</label>
+                <input type="date" id="order-date">
+            </div>
+            <div class="form-group">
+                <label>Выберите товары:</label>
+                <div id="order-items">
+                    <!-- Товары будут добавлены через JavaScript -->
+                </div>
+            </div>
+            <button class="btn btn-primary" id="create-order">Создать заказ</button>
+        </div>
+
+        <!-- Экран истории продаж -->
+        <div id="history" class="screen">
+            <h2>История продаж</h2>
+            <div id="orders-history">
+                <!-- Заказы будут добавлены через JavaScript -->
+            </div>
+        </div>
+
+        <!-- Экран статистики -->
+        <div id="stats" class="screen">
+            <h2>Статистика продаж</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Общее количество заказов</h3>
+                    <div class="stat-value" id="total-orders">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Общая выручка</h3>
+                    <div class="stat-value" id="total-revenue">0 руб</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Самый популярный товар</h3>
+                    <div class="stat-value" id="popular-product">-</div>
+                </div>
+            </div>
+            <h3>Детализация по товарам</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Количество проданных кг</th>
+                        <th>Выручка</th>
+                    </tr>
+                </thead>
+                <tbody id="stats-details">
+                    <!-- Данные будут заполнены через JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Экран настроек -->
+        <div id="settings" class="screen">
+            <h2>Настройки</h2>
+            <div class="settings-option">
+                <h3>Тема оформления</h3>
+                <div class="theme-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Тёмная тема</span>
+                </div>
+            </div>
+            <div class="settings-option">
+                <h3>Экспорт и импорт данных</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="export-data">Экспорт в Excel</button>
+                    <button class="btn btn-success" id="import-data">Импорт из Excel</button>
+                    <input type="file" id="file-input" accept=".xlsx, .xls" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Данные приложения
+        let products = JSON.parse(localStorage.getItem('products')) || [
+            { id: 1, name: "Икра горбуши", price: 5000 },
+            { id: 2, name: "Икра нерки", price: 5500 },
+            { id: 3, name: "Икра кеты", price: 6000 },
+            { id: 4, name: "Икра форели", price: 4500 },
+            { id: 5, name: "Икра кижуча", price: 5200 }
+        ];
+
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
+        let currentTheme = localStorage.getItem('theme') || 'light';
+
+        // Инициализация приложения
+        document.addEventListener('DOMContentLoaded', function() {
+            // Установка текущей темы
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            document.getElementById('theme-toggle').checked = currentTheme === 'dark';
+            
+            // Инициализация экранов
+            initPriceScreen();
+            initOrdersScreen();
+            initHistoryScreen();
+            initStatsScreen();
+            initSettingsScreen();
+            
+            // Настройка навигации
+            setupNavigation();
+        });
+
+        // Настройка навигации между экранами
+        function setupNavigation() {
+            const menuButtons = document.querySelectorAll('.menu-btn');
+            
+            menuButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetScreen = this.getAttribute('data-screen');
+                    
+                    // Скрыть все экраны
+                    document.querySelectorAll('.screen').forEach(screen => {
+                        screen.classList.remove('active');
+                    });
+                    
+                    // Показать целевой экран
+                    document.getElementById(targetScreen).classList.add('active');
+                });
+            });
+        }
+
+        // Инициализация экрана прайс-листа
+        function initPriceScreen() {
+            const priceList = document.getElementById('price-list');
+            priceList.innerHTML = '';
+            
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>
+                        <input type="number" class="price-input" value="${product.price}" data-id="${product.id}">
+                    </td>
+                    <td class="price-actions">
+                        <button class="btn btn-success save-price" data-id="${product.id}">Сохранить</button>
+                        <button class="btn btn-danger delete-product" data-id="${product.id}">Удалить</button>
+                    </td>
+                `;
+                priceList.appendChild(row);
+            });
+            
+            // Добавление обработчиков для кнопок сохранения цен
+            document.querySelectorAll('.save-price').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const priceInput = document.querySelector(`.price-input[data-id="${productId}"]`);
+                    const newPrice = parseFloat(priceInput.value);
+                    
+                    if (isNaN(newPrice) || newPrice < 0) {
+                        alert('Пожалуйста, введите корректную цену');
+                        return;
+                    }
+                    
+                    updateProductPrice(productId, newPrice);
+                });
+            });
+            
+            // Добавление обработчиков для кнопок удаления товаров
+            document.querySelectorAll('.delete-product').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    deleteProduct(productId);
+                });
+            });
+            
+            // Добавление обработчика для кнопки добавления товара
+            document.getElementById('add-product').addEventListener('click', function() {
+                addNewProduct();
+            });
+        }
+
+        // Обновление цены товара
+        function updateProductPrice(productId, newPrice) {
+            const productIndex = products.findIndex(p => p.id === productId);
+            
+            if (productIndex !== -1) {
+                products[productIndex].price = newPrice;
+                saveProducts();
+                alert('Цена успешно обновлена!');
+                
+                // Обновление экранов заказов и статистики
+                initOrdersScreen();
+                initStatsScreen();
+            }
+        }
+
+        // Удаление товара
+        function deleteProduct(productId) {
+            if (confirm('Вы уверены, что хотите удалить этот товар?')) {
+                // Проверка, есть ли заказы с этим товаром
+                const hasOrders = orders.some(order => 
+                    order.items.some(item => item.productId === productId)
+                );
+                
+                if (hasOrders) {
+                    alert('Нельзя удалить товар, который есть в заказах');
+                    return;
+                }
+                
+                products = products.filter(p => p.id !== productId);
+                saveProducts();
+                initPriceScreen();
+                initOrdersScreen();
+            }
+        }
+
+        // Добавление нового товара
+        function addNewProduct() {
+            const productName = prompt('Введите название нового товара:');
+            
+            if (!productName) return;
+            
+            const productPrice = parseFloat(prompt('Введите цену товара (руб/кг):'));
+            
+            if (isNaN(productPrice) || productPrice < 0) {
+                alert('Пожалуйста, введите корректную цену');
+                return;
+            }
+            
+            const newProduct = {
+                id: Date.now(),
+                name: productName,
+                price: productPrice
+            };
+            
+            products.push(newProduct);
+            saveProducts();
+            initPriceScreen();
+            initOrdersScreen();
+        }
+
+        // Сохранение товаров в localStorage
+        function saveProducts() {
+            localStorage.setItem('products', JSON.stringify(products));
+        }
+
+        // Инициализация экрана заказов
+        function initOrdersScreen() {
+            const orderItems = document.getElementById('order-items');
+            orderItems.innerHTML = '';
+            
+            // Добавление товаров для выбора
+            products.forEach(product => {
+                const checkboxGroup = document.createElement('div');
+                checkboxGroup.className = 'checkbox-group';
+                checkboxGroup.innerHTML = `
+                    <input type="checkbox" id="product-${product.id}" value="${product.id}">
+                    <label for="product-${product.id}">${product.name} - ${product.price} руб/кг</label>
+                    <input type="number" id="quantity-${product.id}" min="0.1" step="0.1" placeholder="Количество (кг)" style="margin-left: 10px; width: 150px;" disabled>
+                `;
+                orderItems.appendChild(checkboxGroup);
+                
+                // Включение/выключение поля количества при выборе товара
+                document.getElementById(`product-${product.id}`).addEventListener('change', function() {
+                    document.getElementById(`quantity-${product.id}`).disabled = !this.checked;
+                });
+            });
+            
+            // Установка текущей даты по умолчанию
+            document.getElementById('order-date').valueAsDate = new Date();
+            
+            // Обработчик создания заказа
+            document.getElementById('create-order').addEventListener('click', function() {
+                createOrder();
+            });
+        }
+
+        // Создание нового заказа
+        function createOrder() {
+            const clientName = document.getElementById('client-name').value;
+            const orderDate = document.getElementById('order-date').value;
+            
+            if (!clientName) {
+                alert('Пожалуйста, введите имя клиента');
+                return;
+            }
+            
+            const orderItems = [];
+            let totalAmount = 0;
+            
+            products.forEach(product => {
+                const checkbox = document.getElementById(`product-${product.id}`);
+                const quantityInput = document.getElementById(`quantity-${product.id}`);
+                
+                if (checkbox.checked && quantityInput.value) {
+                    const quantity = parseFloat(quantityInput.value);
+                    const amount = product.price * quantity;
+                    
+                    orderItems.push({
+                        productId: product.id,
+                        productName: product.name,
+                        quantity: quantity,
+                        price: product.price,
+                        amount: amount
+                    });
+                    
+                    totalAmount += amount;
+                }
+            });
+            
+            if (orderItems.length === 0) {
+                alert('Пожалуйста, выберите хотя бы один товар');
+                return;
+            }
+            
+            const newOrder = {
+                id: Date.now(),
+                clientName: clientName,
+                date: orderDate,
+                items: orderItems,
+                totalAmount: totalAmount,
+                status: 'active'
+            };
+            
+            orders.push(newOrder);
+            saveOrders();
+            
+            // Очистка формы
+            document.getElementById('client-name').value = '';
+            document.getElementById('order-date').valueAsDate = new Date();
+            
+            products.forEach(product => {
+                document.getElementById(`product-${product.id}`).checked = false;
+                document.getElementById(`quantity-${product.id}`).value = '';
+                document.getElementById(`quantity-${product.id}`).disabled = true;
+            });
+            
+            alert('Заказ успешно создан!');
+            
+            // Обновление экранов истории и статистики
+            initHistoryScreen();
+            initStatsScreen();
+        }
+
+        // Инициализация экрана истории продаж
+        function initHistoryScreen() {
+            const ordersHistory = document.getElementById('orders-history');
+            ordersHistory.innerHTML = '';
+            
+            if (orders.length === 0) {
+                ordersHistory.innerHTML = '<p>Нет заказов для отображения</p>';
+                return;
+            }
+            
+            orders.forEach(order => {
+                const orderElement = document.createElement('div');
+                orderElement.className = 'order-item';
+                
+                let itemsHtml = '';
+                order.items.forEach(item => {
+                    itemsHtml += `<div>${item.productName} - ${item.quantity} кг - ${item.amount} руб</div>`;
+                });
+                
+                orderElement.innerHTML = `
+                    <div class="order-info">
+                        <h3>Заказ #${order.id} - ${order.clientName}</h3>
+                        <p>Дата: ${order.date}</p>
+                        <div>${itemsHtml}</div>
+                        <p><strong>Итого: ${order.totalAmount} руб</strong></p>
+                        <p>Статус: ${order.status === 'active' ? 'Активный' : 'Отменен'}</p>
+                    </div>
+                    <div class="order-actions">
+                        ${order.status === 'active' ? 
+                            `<button class="btn btn-warning edit-order" data-id="${order.id}">Редактировать</button>
+                             <button class="btn btn-danger cancel-order" data-id="${order.id}">Отменить</button>` : 
+                            '<span>Заказ отменен</span>'}
+                    </div>
+                `;
+                
+                ordersHistory.appendChild(orderElement);
+            });
+            
+            // Добавление обработчиков для кнопок редактирования и отмены
+            document.querySelectorAll('.edit-order').forEach(button => {
+                button.addEventListener('click', function() {
+                    const orderId = parseInt(this.getAttribute('data-id'));
+                    editOrder(orderId);
+                });
+            });
+            
+            document.querySelectorAll('.cancel-order').forEach(button => {
+                button.addEventListener('click', function() {
+                    const orderId = parseInt(this.getAttribute('data-id'));
+                    cancelOrder(orderId);
+                });
+            });
+        }
+
+        // Редактирование заказа
+        function editOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            // В реальном приложении здесь была бы форма редактирования
+            // Для демонстрации просто изменим статус
+            const newClientName = prompt('Введите новое имя клиента:', order.clientName);
+            if (newClientName) {
+                order.clientName = newClientName;
+                saveOrders();
+                initHistoryScreen();
+                initStatsScreen();
+            }
+        }
+
+        // Отмена заказа
+        function cancelOrder(orderId) {
+            if (confirm('Вы уверены, что хотите отменить этот заказ?')) {
+                const order = orders.find(o => o.id === orderId);
+                if (order) {
+                    order.status = 'cancelled';
+                    saveOrders();
+                    initHistoryScreen();
+                    initStatsScreen();
+                }
+            }
+        }
+
+        // Инициализация экрана статистики
+        function initStatsScreen() {
+            // Общее количество заказов
+            const activeOrders = orders.filter(order => order.status === 'active');
+            document.getElementById('total-orders').textContent = activeOrders.length;
+            
+            // Общая выручка
+            const totalRevenue = activeOrders.reduce((sum, order) => sum + order.totalAmount, 0);
+            document.getElementById('total-revenue').textContent = `${totalRevenue} руб`;
+            
+            // Самый популярный товар
+            const productSales = {};
+            activeOrders.forEach(order => {
+                order.items.forEach(item => {
+                    if (!productSales[item.productName]) {
+                        productSales[item.productName] = 0;
+                    }
+                    productSales[item.productName] += item.quantity;
+                });
+            });
+            
+            let popularProduct = '-';
+            let maxQuantity = 0;
+            
+            for (const product in productSales) {
+                if (productSales[product] > maxQuantity) {
+                    maxQuantity = productSales[product];
+                    popularProduct = product;
+                }
+            }
+            
+            document.getElementById('popular-product').textContent = popularProduct;
+            
+            // Детализация по товарам
+            const statsDetails = document.getElementById('stats-details');
+            statsDetails.innerHTML = '';
+            
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                const totalQuantity = activeOrders.reduce((sum, order) => {
+                    const item = order.items.find(i => i.productId === product.id);
+                    return sum + (item ? item.quantity : 0);
+                }, 0);
+                
+                const totalRevenue = activeOrders.reduce((sum, order) => {
+                    const item = order.items.find(i => i.productId === product.id);
+                    return sum + (item ? item.amount : 0);
+                }, 0);
+                
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${totalQuantity.toFixed(2)} кг</td>
+                    <td>${totalRevenue} руб</td>
+                `;
+                statsDetails.appendChild(row);
+            });
+        }
+
+        // Инициализация экрана настроек
+        function initSettingsScreen() {
+            // Переключение темы
+            document.getElementById('theme-toggle').addEventListener('change', function() {
+                const newTheme = this.checked ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+            
+            // Экспорт данных
+            document.getElementById('export-data').addEventListener('click', function() {
+                exportToExcel();
+            });
+            
+            // Импорт данных
+            document.getElementById('import-data').addEventListener('click', function() {
+                document.getElementById('file-input').click();
+            });
+            
+            document.getElementById('file-input').addEventListener('change', function(e) {
+                importFromExcel(e.target.files[0]);
+            });
+        }
+
+        // Экспорт данных в Excel (симуляция)
+        function exportToExcel() {
+            // В реальном приложении здесь был бы код для создания Excel файла
+            // Для демонстрации просто скачаем JSON
+            const data = {
+                products: products,
+                orders: orders
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'sales_data.json';
+            link.click();
+            
+            alert('Данные экспортированы (в реальном приложении был бы Excel файл)');
+        }
+
+        // Импорт данных из Excel (симуляция)
+        function importFromExcel(file) {
+            if (!file) return;
+            
+            // В реальном приложении здесь был бы парсинг Excel файла
+            // Для демонстрации просто прочитаем текстовый файл
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (importedData.products && Array.isArray(importedData.products)) {
+                        products = importedData.products;
+                        saveProducts();
+                    }
+                    
+                    if (importedData.orders && Array.isArray(importedData.orders)) {
+                        orders = importedData.orders;
+                        saveOrders();
+                    }
+                    
+                    initPriceScreen();
+                    initOrdersScreen();
+                    initHistoryScreen();
+                    initStatsScreen();
+                    
+                    alert('Данные успешно импортированы!');
+                } catch (error) {
+                    alert('Ошибка при импорте данных: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Сохранение заказов в localStorage
+        function saveOrders() {
+            localStorage.setItem('orders', JSON.stringify(orders));
+        }
+    </script>
+</body>
+</html>
